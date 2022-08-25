@@ -1,0 +1,58 @@
+name: Main workflow
+
+on:
+  # push:                            # Dispatch on push
+  #  branches: [ develop ]
+  # schedule:
+  #   - cron: 0 0 * * *              # Scheduled dispatch at the end of everyday
+  pull_request:                      # Dispatch on PR
+    branches: [ develop ]
+    types: [ review_requested ]
+  workflow_dispatch:                 # Manually dispatch
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v3                 # Git toolchain to check out code
+
+    - uses: actions-rs/toolchain@v1             # Rust toolchain
+      with:
+        toolchain: 1.63.0
+        components: rustfmt, clippy
+
+    - uses: actions/checkout@v2
+
+    - name: Cache LLVM and Clang                # Cache LLVM and Clang
+      id: cache-llvm
+      uses: actions/cache@v2
+      with:
+        path: ./llvm
+        key: llvm-14.0.5-v5
+
+    - name: Install LLVM and Clang              # Install LLVM and Clang
+      uses: sbip-sg/install-llvm-action@v1.5.10
+      with:
+        version: "14.0.5-v5"
+        cached: ${{ steps.cache-llvm.outputs.cache-hit }}
+
+    - name: Check code formatting
+      run: cargo +stable fmt
+
+    - name: Check code linting
+      run: cargo +stable clippy --tests --benches --features linting
+
+    - name: Check documentation linting
+      run: cargo +stable doc --no-deps --features linting
+
+    - name: Build all targets
+      run: cargo +stable build
+
+    - name: Run all tests
+      run: cargo +stable test --workspace
