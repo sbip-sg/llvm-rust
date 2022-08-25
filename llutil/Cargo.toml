@@ -1,0 +1,19 @@
+[package]
+name = "llutil"
+authors = ["Verazt's authors and contributors"]
+version = "0.1.0"
+edition = "2021"
+
+[features]
+linting = []
+
+# Dependencies should be alphabetically sorted.
+# Use package version in form of "x.y" to avoid updating them frequently.
+[dependencies]
+inkwell = { path = "../inkwell", features = ["internal-getters", "llvm14-0"] }
+nom = "7.1"
+nom_locate = "4.0"
+regex = "1.5"
+remain = "0.2"
+semver = "1.0"
+rutil = { git = "https://github.com/sbip-sg/rutil" }

@@ -1,2 +1,2 @@
 [workspace]
-members = ["llvm-sys", "inkwell"]
+members = ["llvm-sys", "inkwell", "llutil"]
