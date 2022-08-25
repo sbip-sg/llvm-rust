@@ -4,7 +4,6 @@ use regex::Regex;
 use semver::{Version, VersionReq};
 use std::{ffi::OsStr, fs, path::Path, process::Command};
 
-use crate::file::CodeFile;
 use crate::tool;
 use rutil::{report, system};
 
@@ -61,12 +60,11 @@ pub fn check_llvm_optimization_settings() {
 }
 
 /// Optimize an LLVM bitcode file and return the output bitcode file name.
-pub fn optimize(file: &CodeFile) -> CodeFile {
+pub fn optimize(input_file: &str) -> String {
     // Check the tool settings
     check_llvm_optimization_settings();
 
     // Start to optimize file
-    let input_file = &file.file_name;
     let input_file_path = Path::new(input_file);
     let file_stem_name = input_file_path
         .file_stem()
@@ -98,5 +96,5 @@ pub fn optimize(file: &CodeFile) -> CodeFile {
         panic!("Llvm-opt: failed to optimize: {}", input_file);
     }
 
-    CodeFile::derive_from_file(out_file_name, file)
+    out_file_name.to_string()
 }

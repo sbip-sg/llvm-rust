@@ -1,6 +1,6 @@
 //! Module provide additional utilities to handle LLVM `FunctionValue`.
 
-use crate::{file::CodeFile, ir::builtin};
+use crate::ir::builtin;
 use inkwell::values::{AnyValue, FunctionValue};
 use rutil::string::StringUtil;
 
@@ -15,20 +15,20 @@ pub trait FunctionExt {
     /// Print the `FunctionValue` to string in a pretty format.
     fn print_pretty(&self) -> String;
 
-    /// Check if the current function is a library function.
-    fn is_library_function(&self, file: &CodeFile) -> bool;
+    // /// Check if the current function is a library function.
+    // fn is_library_function(&self, file: &CodeFile) -> bool;
 
-    /// Check if the current function is a C library function.
-    fn is_c_library_function(&self, file: &CodeFile) -> bool;
+    // /// Check if the current function is a C library function.
+    // fn is_c_library_function(&self, file: &CodeFile) -> bool;
 
-    /// Check if the current function is a C main function.
-    fn is_c_main_function(&self, file: &CodeFile) -> bool;
+    // /// Check if the current function is a C main function.
+    // fn is_c_main_function(&self, file: &CodeFile) -> bool;
 
-    /// Check if the current function is a Solidity library  function.
-    fn is_solidity_library_function(&self, file: &CodeFile) -> bool;
+    // /// Check if the current function is a Solidity library  function.
+    // fn is_solidity_library_function(&self, file: &CodeFile) -> bool;
 
-    /// Check if the current function is a Solidity entry function.
-    fn is_solidity_entry_function(&self, file: &CodeFile) -> bool;
+    // /// Check if the current function is a Solidity entry function.
+    // fn is_solidity_entry_function(&self, file: &CodeFile) -> bool;
 
     /// Check if the current function is an LLVM library function.
     fn is_llvm_intrinsic_function(&self) -> bool;
@@ -80,33 +80,33 @@ impl<'a> FunctionExt for FunctionValue<'a> {
         res
     }
 
-    fn is_library_function(&self, file: &CodeFile) -> bool {
-        self.is_c_library_function(file)
-            || self.is_solidity_library_function(file)
-            || self.is_verazt_library_function()
-    }
+    // fn is_library_function(&self, file: &CodeFile) -> bool {
+    //     self.is_c_library_function(file)
+    //         || self.is_solidity_library_function(file)
+    //         || self.is_verazt_library_function()
+    // }
 
-    fn is_c_library_function(&self, file: &CodeFile) -> bool {
-        file.is_originally_from_c_cpp()
-            && builtin::is_c_library_function(&self.get_name_or_default())
-    }
+    // fn is_c_library_function(&self, file: &CodeFile) -> bool {
+    //     file.is_originally_from_c_cpp()
+    //         && builtin::is_c_library_function(&self.get_name_or_default())
+    // }
 
-    fn is_c_main_function(&self, file: &CodeFile) -> bool {
-        file.is_originally_from_c_cpp()
-            && builtin::is_c_main_function(&self.get_name_or_default())
-    }
+    // fn is_c_main_function(&self, file: &CodeFile) -> bool {
+    //     file.is_originally_from_c_cpp()
+    //         && builtin::is_c_main_function(&self.get_name_or_default())
+    // }
 
-    fn is_solidity_library_function(&self, file: &CodeFile) -> bool {
-        file.is_originally_from_solidity()
-            && builtin::is_solidity_library_function(
-                &self.get_name_or_default(),
-            )
-    }
+    // fn is_solidity_library_function(&self, file: &CodeFile) -> bool {
+    //     file.is_originally_from_solidity()
+    //         && builtin::is_solidity_library_function(
+    //             &self.get_name_or_default(),
+    //         )
+    // }
 
-    fn is_solidity_entry_function(&self, file: &CodeFile) -> bool {
-        file.is_originally_from_solidity()
-            && !builtin::is_c_library_function(&self.get_name_or_default())
-    }
+    // fn is_solidity_entry_function(&self, file: &CodeFile) -> bool {
+    //     file.is_originally_from_solidity()
+    //         && !builtin::is_c_library_function(&self.get_name_or_default())
+    // }
 
     fn is_llvm_intrinsic_function(&self) -> bool {
         builtin::is_llvm_intrinsic_function(&self.get_name_or_default())

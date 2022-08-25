@@ -25,6 +25,10 @@ linting: format
 test:
 	cargo +stable test --workspace --features linting
 
+# Update packages
+update:
+	cargo +stable update
+
 # Clean code
 clean:
 	cargo +stable clean

@@ -4,7 +4,6 @@ use regex::Regex;
 use semver::{Version, VersionReq};
 use std::{ffi::OsStr, fs, path::Path, process::Command};
 
-use crate::file::CodeFile;
 use crate::tool;
 use crate::tool::OUTPUT_DIR;
 use rutil::report;
@@ -66,8 +65,7 @@ pub fn check_llvm_assembler_settings() {
 }
 
 /// Compile LLVM IR programs and return the output bitcode file name.
-pub fn assemble(file: &CodeFile) -> Vec<CodeFile> {
-    let filename = &file.file_name;
+pub fn assemble(filename: &str) -> Vec<String> {
     let filepath = Path::new(filename);
     let file_stem_name =
         filepath.file_stem().and_then(OsStr::to_str).unwrap_or("");
@@ -97,6 +95,5 @@ pub fn assemble(file: &CodeFile) -> Vec<CodeFile> {
         panic!("Failed to compile: {}", filename);
     }
 
-    let output_file = CodeFile::derive_from_file(output_file_name, file);
-    vec![output_file]
+    vec![output_file_name.to_owned()]
 }

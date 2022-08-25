@@ -4,7 +4,7 @@ use regex::Regex;
 use semver::{Version, VersionReq};
 use std::{ffi::OsStr, fs, path::Path, process::Command};
 
-use crate::file::{ext, CodeFile};
+use crate::file::ext;
 use crate::tool::{self, OUTPUT_DIR};
 use rutil::string::StringUtil;
 use rutil::{report, system};
@@ -67,15 +67,14 @@ pub fn check_solc_settings() {
 /// Input: The source `input_file`. `options` contains all options to run
 /// `input_file` using solc
 pub fn compile(
-    file: &CodeFile,
+    input_file: &str,
     options: &str,
     extension: &str,
-) -> Vec<CodeFile> {
+) -> Vec<String> {
     // Check compiler settings
     check_solc_settings();
 
     // Start to compile the input file
-    let input_file = &file.file_name;
     let input_file_path = Path::new(input_file);
     let filename = input_file_path
         .file_name()
@@ -114,9 +113,9 @@ pub fn compile(
 
     system::ls_dir(output_dir_path)
         .into_iter()
-        .filter_map(|filename| -> Option<CodeFile> {
+        .filter_map(|filename| -> Option<String> {
             if filename.ends_with(extension) {
-                Some(CodeFile::derive_from_file(&filename, file))
+                Some(filename)
             } else {
                 None
             }
@@ -130,9 +129,9 @@ pub fn compile(
 ///
 /// Output: a vector of EVM bytecode file name.
 pub fn compile_to_evm_bytecode(
-    file: &CodeFile,
+    file: &str,
     user_options: &[&str],
-) -> Vec<CodeFile> {
+) -> Vec<String> {
     let options = user_options.join(" ").add_prefix_if_not_empty(" ");
     let options = options + " --asm";
     compile(file, &options, ext::EVM)
@@ -144,10 +143,7 @@ pub fn compile_to_evm_bytecode(
 ///
 /// Output: a vector of output JSON file names which contain the ASTs.
 ///
-pub fn compile_to_json_ast(
-    file: &CodeFile,
-    user_options: &[&str],
-) -> Vec<CodeFile> {
+pub fn compile_to_json_ast(file: &str, user_options: &[&str]) -> Vec<String> {
     let mut options = user_options.join(" ").add_prefix_if_not_empty(" ");
     options.push_str(" --asm-json");
     compile(file, &options, ext::EVM)
@@ -159,7 +155,7 @@ pub fn compile_to_json_ast(
 ///
 /// Output: A YUL file containing intermediate representations in YUL.
 ///
-pub fn compile_to_yul(file: &CodeFile, user_options: &[&str]) -> Vec<CodeFile> {
+pub fn compile_to_yul(file: &str, user_options: &[&str]) -> Vec<String> {
     let options = user_options.join(" ").add_prefix_if_not_empty(" ");
     let options = options + " --ir";
     compile(file, &options, ext::YUL)

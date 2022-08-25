@@ -26,7 +26,5 @@ extern crate rutil;
 // Export sub modules
 pub mod file;
 pub mod global;
-pub mod instrument;
 pub mod ir;
-pub mod normalize;
 pub mod tool;

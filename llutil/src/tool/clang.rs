@@ -4,7 +4,6 @@ use regex::Regex;
 use semver::{Version, VersionReq};
 use std::{ffi::OsStr, fs, path::Path, process::Command};
 
-use crate::file::CodeFile;
 use crate::tool::{self, OUTPUT_DIR};
 use rutil::string::StringUtil;
 use rutil::{report, system};
@@ -61,16 +60,15 @@ pub fn check_clang_settings() {
 
 /// Compile C/C++ programs and return the output bitcode file name.
 pub fn compile(
-    file: &CodeFile,
+    input_file: &str,
     user_options: &[&str],
     include_dirs: &[&str],
     include_files: &[&str],
-) -> Vec<CodeFile> {
+) -> Vec<String> {
     // Check compiler settings
     check_clang_settings();
 
     // Start to compile the input file
-    let input_file = &file.file_name;
     let input_file_path = Path::new(input_file);
     let input_file_stem = input_file_path
         .file_stem()
@@ -95,7 +93,7 @@ pub fn compile(
         + " -Xclang -disable-O0-optnone"
         + " -Werror=implicit-function-declaration"
         + " -c -emit-llvm";
-    let source_files = [&[input_file.as_str()], include_files].concat();
+    let source_files = [&[input_file], include_files].concat();
     let mut output_files = Vec::new();
     for file in source_files {
         let file_stem = Path::new(file)
@@ -147,5 +145,5 @@ pub fn compile(
         panic!("Failed to compile: {}", input_file);
     }
 
-    vec![CodeFile::derive_from_file(final_output_file, file)]
+    vec![final_output_file.to_owned()]
 }

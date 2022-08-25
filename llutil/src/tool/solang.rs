@@ -4,7 +4,7 @@ use regex::Regex;
 use semver::{Version, VersionReq};
 use std::{ffi::OsStr, fs, path::Path, process::Command};
 
-use crate::file::{ext, CodeFile};
+use crate::file::ext;
 use crate::tool::{self, OUTPUT_DIR};
 use rutil::string::StringUtil;
 use rutil::{report, system};
@@ -62,12 +62,11 @@ pub fn check_solang_settings() {
 }
 
 /// Compile Solidity programs and return the output bitcode file name.
-pub fn compile(file: &CodeFile, user_options: &[&str]) -> Vec<CodeFile> {
+pub fn compile(input_file: &str, user_options: &[&str]) -> Vec<String> {
     // Check compiler settings
     check_solang_settings();
 
     // Start to compile the input file
-    let input_file = &file.file_name;
     let input_file_path = Path::new(input_file);
     let filename = input_file_path
         .file_name()
@@ -109,9 +108,9 @@ pub fn compile(file: &CodeFile, user_options: &[&str]) -> Vec<CodeFile> {
 
     system::ls_dir(output_dir_path)
         .into_iter()
-        .filter_map(|filename: String| -> Option<CodeFile> {
+        .filter_map(|filename: String| -> Option<String> {
             if filename.ends_with(ext::BC) {
-                Some(CodeFile::derive_from_file(&filename, file))
+                Some(filename)
             } else {
                 None
             }

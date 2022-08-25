@@ -17,5 +17,3 @@
 #![cfg_attr(feature = "linting", deny(rustdoc::broken_intra_doc_links))]
 #![cfg_attr(feature = "linting", deny(rustdoc::bare_urls))]
 //---------------------------------------------------------------------
-
-mod test_bug_annotation;

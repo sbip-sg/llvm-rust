@@ -2,8 +2,6 @@
 
 use std::fmt::{self, Display};
 
-use rutil::cli::CoreOptions;
-
 /// Default compilation output directory
 pub const OUTPUT_DIR: &str = "logs";
 
@@ -54,19 +52,19 @@ pub struct CompilerOptions<'a> {
 
 /// Implement methods for `CompilerOptions`.
 impl<'a> CompilerOptions<'a> {
-    /// Constructor
-    pub fn from_core_option(core_opts: &'a CoreOptions<'a>) -> Self {
-        CompilerOptions {
-            clang_options: core_opts.clang_options.to_owned(),
-            include_dirs: core_opts.include_dirs.to_owned(),
-            include_files: core_opts.include_files.to_owned(),
-            print_compiled_prog: core_opts.print_compiled_prog,
-            rustc_options: core_opts.rustc_options.to_owned(),
-            solang_options: core_opts.solang_options.to_owned(),
-            solc_options: core_opts.solc_options.to_owned(),
-            compiler: Compiler::Unknown,
-        }
-    }
+    // /// Constructor
+    // pub fn from_core_option(core_opts: &'a CoreOptions<'a>) -> Self {
+    //     CompilerOptions {
+    //         clang_options: core_opts.clang_options.to_owned(),
+    //         include_dirs: core_opts.include_dirs.to_owned(),
+    //         include_files: core_opts.include_files.to_owned(),
+    //         print_compiled_prog: core_opts.print_compiled_prog,
+    //         rustc_options: core_opts.rustc_options.to_owned(),
+    //         solang_options: core_opts.solang_options.to_owned(),
+    //         solc_options: core_opts.solc_options.to_owned(),
+    //         compiler: Compiler::Unknown,
+    //     }
+    // }
 }
 
 // Implement the trait `Display` for `Compiler`.
