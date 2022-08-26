@@ -11,10 +11,10 @@ use llvm_sys::core::{
 use llvm_sys::core::{
     LLVMCountBasicBlocks, LLVMCountParams, LLVMDeleteFunction,
     LLVMGetBasicBlocks, LLVMGetFirstBasicBlock, LLVMGetFirstParam,
-    LLVMGetFirstUse, LLVMGetFunctionCallConv, LLVMGetGC, LLVMGetIntrinsicID,
-    LLVMGetLastBasicBlock, LLVMGetLastParam, LLVMGetLinkage,
-    LLVMGetNextFunction, LLVMGetNextParam, LLVMGetParam, LLVMGetParams,
-    LLVMGetPreviousFunction, LLVMIsAFunction, LLVMIsConstant,
+    LLVMGetFirstUse, LLVMGetFunctionCallConv, LLVMGetFunctionParent, LLVMGetGC,
+    LLVMGetIntrinsicID, LLVMGetLastBasicBlock, LLVMGetLastParam,
+    LLVMGetLinkage, LLVMGetNextFunction, LLVMGetNextParam, LLVMGetParam,
+    LLVMGetParams, LLVMGetPreviousFunction, LLVMIsAFunction, LLVMIsConstant,
     LLVMSetFunctionCallConv, LLVMSetGC, LLVMSetLinkage, LLVMSetParamAlignment,
     LLVMSetSection,
 };
@@ -33,7 +33,7 @@ use std::mem::forget;
 use crate::attributes::{Attribute, AttributeLoc};
 #[llvm_versions(7.0..=latest)]
 use crate::debug_info::DISubprogram;
-use crate::module::Linkage;
+use crate::module::{Linkage, Module};
 use crate::support::to_c_str;
 use crate::types::{AnyType, FunctionType, PointerType};
 use crate::values::traits::{AnyValue, AsValueRef};
@@ -101,6 +101,11 @@ impl<'ctx> FunctionValue<'ctx> {
         unsafe {
             FunctionValue::new(LLVMGetPreviousFunction(self.as_value_ref()))
         }
+    }
+
+    // FIXME: the call `Module::new(...)` will crash due to memory error.
+    pub fn get_parent(self) -> Module<'ctx> {
+        unsafe { Module::new(LLVMGetFunctionParent(self.as_value_ref())) }
     }
 
     pub fn get_first_param(self) -> Option<BasicValueEnum<'ctx>> {

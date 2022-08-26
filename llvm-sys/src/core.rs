@@ -315,6 +315,7 @@ extern "C" {
     pub fn LLVMGetLastFunction(M: LLVMModuleRef) -> LLVMValueRef;
     pub fn LLVMGetNextFunction(Fn: LLVMValueRef) -> LLVMValueRef;
     pub fn LLVMGetPreviousFunction(Fn: LLVMValueRef) -> LLVMValueRef;
+    pub fn LLVMGetFunctionParent(Fn: LLVMValueRef) -> LLVMModuleRef;
 }
 
 // Core->Types

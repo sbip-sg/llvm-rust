@@ -18,8 +18,8 @@ pub trait FunctionExt {
     // /// Check if the current function is a library function.
     // fn is_library_function(&self, file: &CodeFile) -> bool;
 
-    // /// Check if the current function is a C library function.
-    // fn is_c_library_function(&self, file: &CodeFile) -> bool;
+    /// Check if the current function is a C library function.
+    fn is_c_library_function(&self) -> bool;
 
     // /// Check if the current function is a C main function.
     // fn is_c_main_function(&self, file: &CodeFile) -> bool;
@@ -86,10 +86,11 @@ impl<'a> FunctionExt for FunctionValue<'a> {
     //         || self.is_verazt_library_function()
     // }
 
-    // fn is_c_library_function(&self, file: &CodeFile) -> bool {
-    //     file.is_originally_from_c_cpp()
-    //         && builtin::is_c_library_function(&self.get_name_or_default())
-    // }
+    fn is_c_library_function(&self) -> bool {
+        // file.is_originally_from_c_cpp()
+        //     && builtin::is_c_library_function(&self.get_name_or_default())
+        true
+    }
 
     // fn is_c_main_function(&self, file: &CodeFile) -> bool {
     //     file.is_originally_from_c_cpp()

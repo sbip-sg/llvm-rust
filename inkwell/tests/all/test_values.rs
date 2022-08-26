@@ -949,6 +949,8 @@ fn test_globals() {
     assert!(module.get_global("my_global").is_none());
     assert_eq!(module.get_global("glob").unwrap(), global);
 
+    assert_eq!(global.get_parent(), module);
+
     #[cfg(not(any(
         feature = "llvm3-6",
         feature = "llvm3-7",

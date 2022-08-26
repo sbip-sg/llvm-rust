@@ -1,17 +1,17 @@
 #[llvm_versions(8.0..=latest)]
 use llvm_sys::core::LLVMGlobalSetMetadata;
-#[llvm_versions(3.6..8.0)]
+#[llvm_versions(8.0..=latest)]
 use llvm_sys::core::{
-    LLVMDeleteGlobal, LLVMGetAlignment, LLVMGetDLLStorageClass,
-    LLVMGetInitializer, LLVMGetLinkage, LLVMGetNextGlobal,
-    LLVMGetPreviousGlobal, LLVMGetSection, LLVMGetThreadLocalMode,
-    LLVMGetVisibility, LLVMIsDeclaration, LLVMIsExternallyInitialized,
-    LLVMIsGlobalConstant, LLVMIsThreadLocal, LLVMSetAlignment,
-    LLVMSetDLLStorageClass, LLVMSetExternallyInitialized,
+    LLVMCloneModule, LLVMDeleteGlobal, LLVMGetAlignment,
+    LLVMGetDLLStorageClass, LLVMGetGlobalParent, LLVMGetInitializer,
+    LLVMGetLinkage, LLVMGetNextGlobal, LLVMGetPreviousGlobal, LLVMGetSection,
+    LLVMGetThreadLocalMode, LLVMGetVisibility, LLVMIsDeclaration,
+    LLVMIsExternallyInitialized, LLVMIsGlobalConstant, LLVMIsThreadLocal,
+    LLVMSetAlignment, LLVMSetDLLStorageClass, LLVMSetExternallyInitialized,
     LLVMSetGlobalConstant, LLVMSetInitializer, LLVMSetLinkage, LLVMSetSection,
     LLVMSetThreadLocal, LLVMSetThreadLocalMode, LLVMSetVisibility,
 };
-#[llvm_versions(8.0..=latest)]
+#[llvm_versions(3.6..8.0)]
 use llvm_sys::core::{
     LLVMDeleteGlobal, LLVMGetAlignment, LLVMGetDLLStorageClass,
     LLVMGetInitializer, LLVMGetLinkage, LLVMGetNextGlobal,
@@ -36,7 +36,7 @@ use std::fmt::{self, Display};
 
 #[llvm_versions(7.0..=latest)]
 use crate::comdat::Comdat;
-use crate::module::Linkage;
+use crate::module::{Linkage, Module};
 use crate::support::to_c_str;
 use crate::values::traits::AsValueRef;
 #[llvm_versions(8.0..=latest)]
@@ -70,6 +70,14 @@ impl<'ctx> GlobalValue<'ctx> {
     /// Set the name of a `GlobalValue`.
     pub fn set_name(&self, name: &str) -> () {
         self.global_value.set_name(name)
+    }
+
+    // FIXME: the call `Module::new(m)` will crash due to memory error.
+    pub fn get_parent(self) -> Module<'ctx> {
+        unsafe {
+            let m = LLVMGetGlobalParent(self.as_value_ref());
+            Module::new(m)
+        }
     }
 
     pub fn get_previous_global(self) -> Option<GlobalValue<'ctx>> {
