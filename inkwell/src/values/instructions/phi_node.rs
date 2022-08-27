@@ -37,12 +37,12 @@ impl<'ctx> PhiNode<'ctx> {
     }
 
     /// Get name of the instruction.
-    pub fn get_name(&self) -> &CStr {
+    pub fn get_name(&self) -> Option<&CStr> {
         self.phi_node.get_name()
     }
 
     /// Set name of the instruction.
-    pub fn set_name(&self, name: &str) {
+    pub fn set_name(&self, name: &str) -> Result<(), &'static str> {
         self.as_instruction_value().set_name(name)
     }
 

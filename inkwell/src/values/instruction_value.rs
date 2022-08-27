@@ -152,24 +152,32 @@ impl<'ctx> InstructionValue<'ctx> {
     }
 
     /// Get the name of the `InstructionValue`.
-    pub fn get_name(&self) -> &CStr {
-        self.instruction_value.get_name()
+    pub fn get_name(&self) -> Option<&CStr> {
+        if self.get_type().is_void_type() {
+            None
+        } else {
+            Some(self.instruction_value.get_name())
+        }
     }
 
     /// Get name of the `InstructionValue` or return a default name.
     pub fn get_name_or_default(&self) -> String {
-        match self.get_name().to_str() {
-            Ok(name) => name.to_string(),
-            _ => "<empty-instruction-name>".to_string(),
+        if let Some(name) = self.get_name() {
+            if let Ok(name) = name.to_str() {
+                return name.to_string();
+            }
         }
+
+        String::from("<empty-instruction-name>")
     }
 
     /// Set the name of the `InstructionValue`.
-    pub fn set_name(&self, name: &str) {
+    pub fn set_name(&self, name: &str) -> Result<(), &'static str> {
         if self.get_type().is_void_type() {
-            panic!("Cannot set name of the VoidType instruction: {:?}", self);
+            Err("Cannot set name of a void-type instruction!")
         } else {
-            self.instruction_value.set_name(name)
+            self.instruction_value.set_name(name);
+            Ok(())
         }
     }
 
