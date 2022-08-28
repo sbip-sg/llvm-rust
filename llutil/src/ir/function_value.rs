@@ -148,7 +148,9 @@ impl<'a> FunctionExt for FunctionValue<'a> {
 
     fn is_solidity_entry_function(&self, module: &Module) -> bool {
         module.is_originally_from_solidity()
-            && !builtin::is_solidity_library_function(&self.get_name_or_default())
+            && !builtin::is_solidity_library_function(
+                &self.get_name_or_default(),
+            )
     }
 }
 

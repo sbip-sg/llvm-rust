@@ -2,7 +2,6 @@
 
 // Exporting sub-modules
 pub mod clang;
-pub mod compiler;
 pub mod llvm;
 pub mod llvm_as;
 pub mod llvm_dis;
