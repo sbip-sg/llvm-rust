@@ -22,6 +22,8 @@
 #[macro_use]
 #[allow(unused_extern_crates)]
 extern crate rutil;
+#[allow(unused_extern_crates)]
+extern crate llvm_sys;
 
 // Export sub modules
 pub mod file;

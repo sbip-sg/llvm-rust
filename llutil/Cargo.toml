@@ -10,7 +10,9 @@ linting = []
 # Dependencies should be alphabetically sorted.
 # Use package version in form of "x.y" to avoid updating them frequently.
 [dependencies]
+llvm_sys = { package = "llvm-sys", path = "../llvm-sys", version = "140.0.5" }
 inkwell = { path = "../inkwell", features = ["internal-getters", "llvm14-0"] }
+either = "1.5"
 nom = "7.1"
 nom_locate = "4.0"
 regex = "1.5"

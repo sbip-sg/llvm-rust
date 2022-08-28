@@ -29,14 +29,6 @@ impl<'ctx> StructValue<'ctx> {
         self.struct_value.get_name()
     }
 
-    /// Get name of the `StructValue` or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        match self.get_name().to_str() {
-            Ok(name) => name.to_string(),
-            _ => "<empty-struct-name>".to_string(),
-        }
-    }
-
     /// Get name of the `StructValue`.
     pub fn set_name(&self, name: &str) {
         self.struct_value.set_name(name)

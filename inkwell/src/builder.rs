@@ -45,9 +45,9 @@ use crate::types::{
     AsTypeRef, BasicType, FloatMathType, IntMathType, PointerMathType,
     PointerType,
 };
-use crate::values::instructions::PhiNode;
 use crate::values::BasicBlock;
 use crate::values::CallableValue;
+use crate::values::PhiValue;
 #[llvm_versions(3.9..=latest)]
 use crate::values::StructValue;
 use crate::values::{
@@ -757,7 +757,7 @@ impl<'ctx> Builder<'ctx> {
         unsafe { IntValue::new(value) }
     }
 
-    // SubTypes: Maybe this should return PhiNode<T>? That way we could force incoming values to be of T::Value?
+    // SubTypes: Maybe this should return PhiValue<T>? That way we could force incoming values to be of T::Value?
     // That is, assuming LLVM complains about different phi types.. which I imagine it would. But this would get
     // tricky with VoidType since it has no instance value?
     // TODOC: Phi Instruction(s) must be first instruction(s) in a BasicBlock.
@@ -766,13 +766,13 @@ impl<'ctx> Builder<'ctx> {
         &self,
         type_: T,
         name: &str,
-    ) -> PhiNode<'ctx> {
+    ) -> PhiValue<'ctx> {
         let c_string = to_c_str(name);
         let value = unsafe {
             LLVMBuildPhi(self.builder, type_.as_type_ref(), c_string.as_ptr())
         };
 
-        unsafe { PhiNode::new(InstructionValue::new(value)) }
+        unsafe { PhiValue::new(value) }
     }
 
     /// Builds a store instruction. It allows you to store a value of type `T` in a pointer to a type `T`.

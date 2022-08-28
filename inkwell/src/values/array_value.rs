@@ -29,14 +29,6 @@ impl<'ctx> ArrayValue<'ctx> {
         self.array_value.get_name()
     }
 
-    /// Get name of the `ArrayValue` or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        match self.get_name().to_str() {
-            Ok(name) => name.to_string(),
-            _ => "<empty-array-name>".to_string(),
-        }
-    }
-
     /// Set the name of an `ArrayValue`.
     pub fn set_name(&self, name: &str) {
         self.array_value.set_name(name)

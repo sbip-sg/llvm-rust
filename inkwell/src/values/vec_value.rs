@@ -60,14 +60,6 @@ impl<'ctx> VectorValue<'ctx> {
         self.vec_value.print_to_stderr()
     }
 
-    /// Get name of the `VectorValue` or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        match self.get_name().to_str() {
-            Ok(name) => name.to_string(),
-            _ => "<empty-vector-name>".to_string(),
-        }
-    }
-
     /// Gets the name of a `VectorValue`. If the value is a constant, this will
     /// return an empty string.
     pub fn get_name(&self) -> &CStr {

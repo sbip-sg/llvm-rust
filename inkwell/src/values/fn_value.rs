@@ -37,9 +37,10 @@ use crate::module::{Linkage, Module};
 use crate::support::to_c_str;
 use crate::types::{AnyType, FunctionType, PointerType};
 use crate::values::traits::{AnyValue, AsValueRef};
+use crate::values::BasicBlock;
 use crate::values::{BasicValueEnum, GlobalValue, Value};
 
-use super::{AnyValueEnum, BasicBlock, BasicValueUse};
+use super::{AnyValueEnum, BasicValueUse};
 
 #[derive(PartialEq, Eq, Clone, Copy, Hash)]
 pub struct FunctionValue<'ctx> {
@@ -206,14 +207,6 @@ impl<'ctx> FunctionValue<'ctx> {
     /// Gets the name of a `FunctionValue`.
     pub fn get_name(&self) -> &CStr {
         self.fn_value.get_name()
-    }
-
-    /// Get name of the `FunctionValue` or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        match self.get_name().to_str() {
-            Ok(name) => name.to_string(),
-            _ => "<empty-function-name>".to_string(),
-        }
     }
 
     /// Get first use of the current `FunctionValue`.

@@ -2,8 +2,8 @@
 
 #[deny(missing_docs)]
 mod array_value;
-mod basic_block;
 #[deny(missing_docs)]
+mod basic_block;
 mod basic_value_use;
 #[deny(missing_docs)]
 mod call_site_value;
@@ -14,9 +14,9 @@ mod fn_value;
 mod generic_value;
 mod global_value;
 mod instruction_value;
-pub mod instructions;
 mod int_value;
 mod metadata_value;
+mod phi_value;
 mod ptr_value;
 mod struct_value;
 pub mod traits;
@@ -40,21 +40,14 @@ pub use crate::values::global_value::UnnamedAddress;
 pub use crate::values::instruction_value::{
     InstructionOpcode, InstructionValue,
 };
-pub use crate::values::instructions::{
-    AllocaInst, AnyCall, AnyCast, AnyCmp, AnyCondition, AnyInstruction,
-    AnyTerminator, AsInstructionValue, BinaryOperator, BinaryPredicate,
-    BranchInst, CallBase, CallBrInst, CallInst, CastInst, CmpInst, FCmpInst,
-    FloatPred, ICmpInst, IndirectBrInst, IntPred, InvokeInst, LoadInst,
-    PhiNode, ReturnInst, SExtInst, StoreInst, SwitchInst, TerminatorInst,
-    TruncInst, UnaryOperator, UnreachableInst, ZExtInst,
-};
 pub use crate::values::int_value::IntValue;
 pub use crate::values::metadata_value::{
     MetadataValue, FIRST_CUSTOM_METADATA_KIND_ID,
 };
+pub use crate::values::phi_value::PhiValue;
 pub use crate::values::ptr_value::PointerValue;
 pub use crate::values::struct_value::StructValue;
-pub(crate) use crate::values::traits::AsValueRef;
+pub use crate::values::traits::AsValueRef;
 pub use crate::values::traits::{
     AggregateValue, AnyValue, BasicValue, FloatMathValue, IntMathValue,
     PointerMathValue,

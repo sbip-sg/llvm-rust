@@ -51,22 +51,6 @@ impl<'ctx> IntValue<'ctx> {
         self.int_value.get_name()
     }
 
-    /// Get name of the `IntValue` or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        if let Some(i) = self.get_sign_extended_constant() {
-            i.to_string()
-        } else if let Some(i) = self.get_zero_extended_constant() {
-            i.to_string()
-        } else if let Some(i) = self.get_big_int_constant() {
-            i.to_string()
-        } else {
-            match self.get_name().to_str() {
-                Ok(name) => name.to_string(),
-                _ => "<empty-int-value-name>".to_string(),
-            }
-        }
-    }
-
     /// Set name of the `IntValue`.
     pub fn set_name(&self, name: &str) {
         self.int_value.set_name(name)

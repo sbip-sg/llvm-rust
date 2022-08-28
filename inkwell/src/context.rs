@@ -1,5 +1,6 @@
 //! A `Context` is an opaque owner and manager of core global data.
 
+use crate::values::BasicBlock;
 #[llvm_versions(7.0..=latest)]
 use crate::InlineAsmDialect;
 use libc::c_void;
@@ -48,8 +49,8 @@ use crate::types::{
     StructType, VoidType,
 };
 use crate::values::{
-    AsValueRef, BasicBlock, BasicMetadataValueEnum, BasicValueEnum,
-    FunctionValue, MetadataValue, PointerValue, StructValue, VectorValue,
+    AsValueRef, BasicMetadataValueEnum, BasicValueEnum, FunctionValue,
+    MetadataValue, PointerValue, StructValue, VectorValue,
 };
 use crate::AddressSpace;
 #[cfg(feature = "internal-getters")]

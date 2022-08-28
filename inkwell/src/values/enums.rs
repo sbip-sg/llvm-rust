@@ -115,21 +115,6 @@ impl<'ctx> AnyValueEnum<'ctx> {
         }
     }
 
-    /// Get name of the `AnyValueEnum` or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        match self {
-            AnyValueEnum::ArrayValue(v) => v.get_name_or_default(),
-            AnyValueEnum::IntValue(v) => v.get_name_or_default(),
-            AnyValueEnum::FloatValue(v) => v.get_name_or_default(),
-            AnyValueEnum::PointerValue(v) => v.get_name_or_default(),
-            AnyValueEnum::StructValue(v) => v.get_name_or_default(),
-            AnyValueEnum::VectorValue(v) => v.get_name_or_default(),
-            AnyValueEnum::FunctionValue(v) => v.get_name_or_default(),
-            AnyValueEnum::InstructionValue(v) => v.get_name_or_default(),
-            AnyValueEnum::MetadataValue(v) => v.get_name_or_default(),
-        }
-    }
-
     pub fn get_type(&self) -> AnyTypeEnum<'ctx> {
         unsafe { AnyTypeEnum::new(LLVMTypeOf(self.as_value_ref())) }
     }
@@ -232,7 +217,7 @@ impl<'ctx> AnyValueEnum<'ctx> {
 }
 
 impl<'ctx> BasicValueEnum<'ctx> {
-    pub(crate) unsafe fn new(value: LLVMValueRef) -> Self {
+    pub unsafe fn new(value: LLVMValueRef) -> Self {
         match LLVMGetTypeKind(LLVMTypeOf(value)) {
             LLVMTypeKind::LLVMFloatTypeKind
             | LLVMTypeKind::LLVMFP128TypeKind
@@ -258,18 +243,6 @@ impl<'ctx> BasicValueEnum<'ctx> {
                 BasicValueEnum::VectorValue(VectorValue::new(value))
             }
             _ => unreachable!("The given type is not a basic type."),
-        }
-    }
-
-    /// Get name of the `BasicValueEnum` or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        match self {
-            BasicValueEnum::ArrayValue(v) => v.get_name_or_default(),
-            BasicValueEnum::IntValue(v) => v.get_name_or_default(),
-            BasicValueEnum::FloatValue(v) => v.get_name_or_default(),
-            BasicValueEnum::PointerValue(v) => v.get_name_or_default(),
-            BasicValueEnum::StructValue(v) => v.get_name_or_default(),
-            BasicValueEnum::VectorValue(v) => v.get_name_or_default(),
         }
     }
 

@@ -29,22 +29,15 @@ use llvm_sys::{prelude::LLVMValueRef, LLVMOpcode};
 
 use std::{convert::TryInto, ffi::CStr, fmt, fmt::Display};
 
-use crate::types::AnyTypeEnum;
 use crate::values::traits::AsValueRef;
 use crate::values::{
     BasicValue, BasicValueEnum, BasicValueUse, MetadataValue, Value,
 };
+use crate::{types::AnyTypeEnum, values::BasicBlock};
 use crate::{AtomicOrdering, FloatPredicate, IntPredicate};
 
 use super::{
-    instructions::{
-        AllocaInst, BinaryOperator, BranchInst, CallBase, CallBrInst, CallInst,
-        CastInst, CmpInst, FCmpInst, ICmpInst, IndirectBrInst, InvokeInst,
-        LoadInst, PhiNode, ReturnInst, SExtInst, StoreInst, SwitchInst,
-        TerminatorInst, TruncInst, UnaryOperator, UnreachableInst, ZExtInst,
-    },
-    AnyValue, AnyValueEnum, BasicBlock, FloatValue, FunctionValue, IntValue,
-    PointerValue,
+    AnyValue, AnyValueEnum, FloatValue, FunctionValue, IntValue, PointerValue,
 };
 
 // REVIEW: Split up into structs for SubTypes on InstructionValues?
@@ -158,17 +151,6 @@ impl<'ctx> InstructionValue<'ctx> {
         } else {
             Some(self.instruction_value.get_name())
         }
-    }
-
-    /// Get name of the `InstructionValue` or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        if let Some(name) = self.get_name() {
-            if let Ok(name) = name.to_str() {
-                return name.to_string();
-            }
-        }
-
-        String::from("<empty-instruction-name>")
     }
 
     /// Set the name of the `InstructionValue`.
@@ -900,252 +882,6 @@ impl<'ctx> InstructionValue<'ctx> {
     /// Check if the current `InstructionValue` is a `zext` instruction.
     pub fn is_a_zext_inst(self) -> bool {
         !unsafe { LLVMIsAZExtInst(self.as_value_ref()) }.is_null()
-    }
-
-    /// Convert the current `InstructionValue` to `AllocaInst`.
-    pub fn try_into_alloca_inst(self) -> Option<AllocaInst<'ctx>> {
-        let res: Result<AllocaInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `BinaryOperator`.
-    pub fn try_into_binary_operator(self) -> Option<BinaryOperator<'ctx>> {
-        let res: Result<BinaryOperator, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `BranchInst`.
-    pub fn try_into_branch_inst(self) -> Option<BranchInst<'ctx>> {
-        let res: Result<BranchInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `CallBase`.
-    pub fn try_into_call_base(self) -> Option<CallBase<'ctx>> {
-        let res: Result<CallBase, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `CallInst`.
-    pub fn try_into_call_inst(self) -> Option<CallInst<'ctx>> {
-        let res: Result<CallInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `CallBrInst`.
-    pub fn try_into_callbr_inst(self) -> Option<CallBrInst<'ctx>> {
-        let res: Result<CallBrInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `CastInst`.
-    pub fn try_into_cast_inst(self) -> Option<CastInst<'ctx>> {
-        let res: Result<CastInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `CmpInst`.
-    pub fn try_into_cmp_inst(self) -> Option<CmpInst<'ctx>> {
-        let res: Result<CmpInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `FCmpInst`.
-    pub fn try_into_fcmp_inst(self) -> Option<FCmpInst<'ctx>> {
-        let res: Result<FCmpInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `ICmpInst`.
-    pub fn try_into_icmp_inst(self) -> Option<ICmpInst<'ctx>> {
-        let res: Result<ICmpInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `IndirectBrInst`.
-    pub fn try_into_indirectbr_inst(self) -> Option<IndirectBrInst<'ctx>> {
-        let res: Result<IndirectBrInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `InvokeInst`.
-    pub fn try_into_invoke_inst(self) -> Option<InvokeInst<'ctx>> {
-        let res: Result<InvokeInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `LoadInst`.
-    pub fn try_into_load_inst(self) -> Option<LoadInst<'ctx>> {
-        let res: Result<LoadInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `PhiNode`.
-    pub fn try_into_phi_node(self) -> Option<PhiNode<'ctx>> {
-        let res: Result<PhiNode, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `ReturnInst`.
-    pub fn try_into_return_inst(self) -> Option<ReturnInst<'ctx>> {
-        let res: Result<ReturnInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `SExtInst`.
-    pub fn try_into_sext_inst(self) -> Option<SExtInst<'ctx>> {
-        let res: Result<SExtInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-    /// Convert the current `InstructionValue` to `StoreInst`.
-    pub fn try_into_store_inst(self) -> Option<StoreInst<'ctx>> {
-        let res: Result<StoreInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `SwitchInst`.
-    pub fn try_into_switch_inst(self) -> Option<SwitchInst<'ctx>> {
-        let res: Result<SwitchInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `TerminatorInst`.
-    pub fn try_into_terminator_inst(self) -> Option<TerminatorInst<'ctx>> {
-        let res: Result<TerminatorInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `TruncInst`.
-    pub fn try_into_trunc_inst(self) -> Option<TruncInst<'ctx>> {
-        let res: Result<TruncInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `UnaryOperator`.
-    pub fn try_into_unary_operator(self) -> Option<UnaryOperator<'ctx>> {
-        let res: Result<UnaryOperator, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `SwitchInst`.
-    pub fn try_into_unreachable_inst(self) -> Option<UnreachableInst<'ctx>> {
-        let res: Result<UnreachableInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to `ZExtInst`.
-    pub fn try_into_zext_inst(self) -> Option<ZExtInst<'ctx>> {
-        let res: Result<ZExtInst, _> = self.try_into();
-        match res {
-            Ok(inst) => Some(inst),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to an `IntValue`.
-    pub fn try_into_int_value(self) -> Option<IntValue<'ctx>> {
-        let res: Result<IntValue, _> = self.try_into();
-        match res {
-            Ok(v) => Some(v),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to a `FloatValue`.
-    pub fn try_into_float_value(self) -> Option<FloatValue<'ctx>> {
-        let res: Result<FloatValue, _> = self.try_into();
-        match res {
-            Ok(v) => Some(v),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to a `PointerValue`.
-    pub fn try_into_pointer_value(self) -> Option<PointerValue<'ctx>> {
-        let res: Result<PointerValue, _> = self.try_into();
-        match res {
-            Ok(v) => Some(v),
-            Err(_) => None,
-        }
-    }
-
-    /// Convert the current `InstructionValue` to a `BasicValueEnum`.
-    pub fn try_into_basic_value_enum(self) -> Option<BasicValueEnum<'ctx>> {
-        if let Some(v) = self.try_into_int_value() {
-            return Some(v.as_basic_value_enum());
-        } else if let Some(v) = self.try_into_float_value() {
-            return Some(v.as_basic_value_enum());
-        } else if let Some(v) = self.try_into_pointer_value() {
-            return Some(v.as_basic_value_enum());
-        } else {
-            None
-        }
     }
 }
 

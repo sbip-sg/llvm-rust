@@ -103,9 +103,9 @@
 use crate::context::Context;
 pub use crate::debug_info::flags::{DIFlags, DIFlagsConstants};
 use crate::module::Module;
+use crate::values::BasicBlock;
 use crate::values::{
-    AsValueRef, BasicBlock, BasicValueEnum, InstructionValue, MetadataValue,
-    PointerValue,
+    AsValueRef, BasicValueEnum, InstructionValue, MetadataValue, PointerValue,
 };
 
 #[cfg(feature = "internal-getters")]

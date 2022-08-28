@@ -97,17 +97,6 @@ impl<'ctx> AsValueRef for CallableValue<'ctx> {
 impl<'ctx> AnyValue<'ctx> for CallableValue<'ctx> {}
 
 impl<'ctx> CallableValue<'ctx> {
-    /// Get name of the `CallableValue` or return a default name.
-    fn get_name_or_default(&self) -> String {
-        if let Some(ptr) = self.as_pointer_value() {
-            ptr.get_name_or_default()
-        } else if let Some(func) = self.as_function_value() {
-            func.get_name_or_default()
-        } else {
-            "<empty-callable-name>".to_owned()
-        }
-    }
-
     /// Convert the current `CallableValue` into the `FunctionValue` type.
     pub fn is_function_value(&self) -> bool {
         match self.0 {

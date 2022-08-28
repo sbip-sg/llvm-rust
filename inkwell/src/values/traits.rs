@@ -14,13 +14,7 @@ use crate::values::{
     InstructionValue, IntValue, PointerValue, StructValue, Value, VectorValue,
 };
 
-use super::instructions::{
-    AllocaInst, BinaryOperator, BranchInst, CallBase, CallBrInst, CallInst,
-    CastInst, CmpInst, FCmpInst, ICmpInst, IndirectBrInst, InvokeInst,
-    LoadInst, PhiNode, ReturnInst, SExtInst, StoreInst, SwitchInst,
-    TerminatorInst, TruncInst, UnaryOperator, UnreachableInst, ZExtInst,
-};
-use super::{BasicMetadataValueEnum, MetadataValue};
+use super::{BasicMetadataValueEnum, MetadataValue, PhiValue};
 
 // This is an ugly privacy hack so that Type can stay private to this module
 // and so that super traits using this trait will be not be implementable
@@ -164,43 +158,21 @@ trait_value_set!(AggregateValue: ArrayValue, AggregateValueEnum, StructValue);
 
 trait_value_set!(
     AnyValue: AggregateValueEnum,
-    AllocaInst,
     AnyValueEnum,
     ArrayValue,
     BasicMetadataValueEnum,
     BasicValueEnum,
-    BinaryOperator,
-    BranchInst,
-    CallBase,
-    CallBrInst,
-    CallInst,
     CallSiteValue,
-    CastInst,
-    CmpInst,
-    FCmpInst,
     FloatValue,
     FunctionValue,
     GlobalValue,
-    ICmpInst,
-    IndirectBrInst,
     InstructionValue,
     IntValue,
-    InvokeInst,
-    LoadInst,
     MetadataValue,
-    PhiNode,
+    PhiValue,
     PointerValue,
-    ReturnInst,
-    SExtInst,
-    StoreInst,
     StructValue,
-    SwitchInst,
-    TerminatorInst,
-    TruncInst,
-    UnaryOperator,
-    UnreachableInst,
-    VectorValue,
-    ZExtInst
+    VectorValue
 );
 
 trait_value_set!(

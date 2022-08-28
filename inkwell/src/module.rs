@@ -1324,14 +1324,6 @@ impl<'ctx> Module<'ctx> {
         unsafe { CStr::from_ptr(cstr_ptr) }
     }
 
-    /// Get name of the module or return a default name.
-    pub fn get_name_or_default(&self) -> String {
-        match self.get_name().to_str() {
-            Ok(name) => name.to_string(),
-            _ => "<unknown-module>".to_string(),
-        }
-    }
-
     /// Assigns the name of this `Module`.
     ///
     /// # Example

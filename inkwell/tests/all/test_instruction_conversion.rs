@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 
 use inkwell::context::Context;
-use inkwell::values::instructions::PhiNode;
+use inkwell::values::PhiValue;
 use inkwell::values::{FloatValue, IntValue, PointerValue};
 use inkwell::AddressSpace;
 
@@ -20,12 +20,12 @@ fn test_phi_conversion() {
     let bool_type = context.bool_type();
     let expect_phi_name = "phi_node";
     let phi = builder.build_phi(bool_type, expect_phi_name);
-    let name = phi.get_name().unwrap().to_str().unwrap();
+    let name = phi.get_name().to_str().unwrap();
     assert_eq!(name, expect_phi_name);
 
     // test that conversion fails
     let ret_instruction = builder.build_return(None);
-    let phi_from_instruction: Result<PhiNode, _> = ret_instruction.try_into();
+    let phi_from_instruction: Result<PhiValue, _> = ret_instruction.try_into();
     assert!(phi_from_instruction.is_err());
 }
 
@@ -89,7 +89,7 @@ fn test_conversion_to_float_value() {
     // Test the instruction conversion to other LLVM Values
     let int_conversion: Result<IntValue, _> = float_instr.try_into();
     assert!(int_conversion.is_err());
-    let phi_conversion: Result<PhiNode, _> = float_instr.try_into();
+    let phi_conversion: Result<PhiValue, _> = float_instr.try_into();
     assert!(phi_conversion.is_err());
 }
 

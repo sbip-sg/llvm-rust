@@ -10,9 +10,7 @@ use llvm_sys::prelude::LLVMUseRef;
 
 use std::marker::PhantomData;
 
-use crate::values::{AnyValueEnum, BasicValueEnum};
-
-use super::BasicBlock;
+use crate::values::{AnyValueEnum, BasicBlock, BasicValueEnum};
 
 /// A usage of a `BasicValue` in another value.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

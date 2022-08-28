@@ -25,7 +25,6 @@ pub mod analysis;
 #[deny(missing_docs)]
 pub mod attributes;
 pub mod builder;
-pub mod cfg;
 #[deny(missing_docs)]
 #[cfg(not(any(
     feature = "llvm3-6",
