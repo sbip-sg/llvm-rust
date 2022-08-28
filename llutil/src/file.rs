@@ -1,4 +1,5 @@
 //! Module handling code unit
+use rutil::system;
 
 /// Module containing extensions of supported code files.
 pub mod ext {
@@ -43,6 +44,9 @@ pub mod ext {
 }
 
 /// Data structure representing the supported file types.
+///
+/// REVIEW: rename this data structure to avoid conflict with Rust's `FileType`.
+/// https://doc.rust-lang.org/std/fs/struct.FileType.html
 #[remain::sorted]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FileType {
@@ -69,4 +73,32 @@ pub enum FileType {
 
     /// Yul intermediate code (IR) file.
     YulIR,
+}
+
+/// Implement methods for file types.
+impl FileType {
+    /// Constructor
+    pub fn new(file_name: &str) -> Self {
+        match system::get_file_ext(file_name) {
+            Some(
+                ext::C | ext::CPP | ext::CXX | ext::H | ext::HPP | ext::HXX,
+            ) => FileType::CCpp,
+            Some(ext::SOL) => FileType::Solidity,
+            Some(ext::BC) => FileType::LLVMBC,
+            Some(ext::LL) => FileType::LLVMIR,
+            Some(ext::EVM) => FileType::EVMBC,
+            Some(ext::YUL) => FileType::YulIR,
+            _ => FileType::Unknown,
+        }
+    }
+
+    /// Check if the current file is a C/C++ file.
+    pub fn is_c_cpp_code(&self) -> bool {
+        matches!(self, FileType::CCpp)
+    }
+
+    /// Check if the current file is a C/C++ file.
+    pub fn is_solidity_code(&self) -> bool {
+        matches!(self, FileType::Solidity)
+    }
 }

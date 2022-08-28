@@ -20,7 +20,7 @@ fn test_phi_conversion() {
     let bool_type = context.bool_type();
     let expect_phi_name = "phi_node";
     let phi = builder.build_phi(bool_type, expect_phi_name);
-    let name = phi.get_name().to_str().unwrap();
+    let name = phi.get_name().unwrap().to_str().unwrap();
     assert_eq!(name, expect_phi_name);
 
     // test that conversion fails

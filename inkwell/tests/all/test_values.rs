@@ -193,7 +193,7 @@ fn test_set_get_name() {
     assert_eq!(array_param.get_name().to_str(), Ok(""));
     assert_eq!(ptr_param.get_name().to_str(), Ok(""));
     assert_eq!(vec_param.get_name().to_str(), Ok(""));
-    assert_eq!(phi_val.get_name().to_str(), Ok("phi_node"));
+    assert_eq!(phi_val.get_name().unwrap().to_str(), Ok("phi_node"));
 
     int_param.set_name("my_val");
     float_param.set_name("my_val2");
@@ -209,7 +209,7 @@ fn test_set_get_name() {
     assert_eq!(array_param.get_name().to_str(), Ok("my_val4"));
     assert_eq!(struct_param.get_name().to_str(), Ok("my_val5"));
     assert_eq!(vec_param.get_name().to_str(), Ok("my_val6"));
-    assert_eq!(phi_val.get_name().to_str(), Ok("phi"));
+    assert_eq!(phi_val.get_name().unwrap().to_str(), Ok("phi"));
 
     // TODO: Test globals, supposedly constant globals work?
 }

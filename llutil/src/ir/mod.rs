@@ -4,6 +4,7 @@
 pub mod basic_block;
 pub mod builtin;
 pub mod function;
+pub mod module;
 
 // Re-export sub-modules' data structures
 pub use basic_block::Blocks;
