@@ -9,3 +9,4 @@ pub mod module;
 // Re-export sub-modules' data structures
 pub use basic_block::Blocks;
 pub use function::{FunctionExt, FunctionOption, FunctionVec};
+pub use module::ModuleExt;
