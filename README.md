@@ -47,7 +47,7 @@ following the below steps to compile LLVM.
 
 ```sh
 # Install prerequisite libraries
-sudo apt install binutils
+sudo apt install binutils libffi-dev
 
 # Prepare installation folder
 export LLVM_INSTALL_DIR=$HOME/llvm/llvm-sbip          # installation dir
