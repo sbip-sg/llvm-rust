@@ -2,7 +2,7 @@
 
 use std::fmt::{self, Display};
 
-use inkwell::values::{AnyValue, AsValueRef, InstructionValue};
+use inkwell::values::{AnyValue, AsValueRef, FunctionValue, InstructionValue};
 use llvm_sys::prelude::LLVMValueRef;
 
 use super::{AnyCall, AnyInstruction, AsInstructionValue};
@@ -23,6 +23,16 @@ impl<'ctx> CallInst<'ctx> {
     pub fn new(inst: InstructionValue<'ctx>) -> Self {
         debug_assert!(inst.is_a_call_inst());
         CallInst { call_inst: inst }
+    }
+
+    /// Find the called function.
+    pub fn get_called_fn_value(self) -> FunctionValue<'ctx> {
+        use llvm_sys::core::LLVMGetCalledValue;
+
+        unsafe {
+            FunctionValue::new(LLVMGetCalledValue(self.as_value_ref()))
+                .expect("This shoud nevel be null?")
+        }
     }
 }
 
