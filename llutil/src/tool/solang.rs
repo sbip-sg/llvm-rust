@@ -88,7 +88,7 @@ pub fn compile(input_file: &str, user_options: &[&str]) -> Vec<String> {
         + " --no-strength-reduce"
         + " --no-dead-storage"
         + " --no-vector-to-slice"
-        + " --target ewasm"
+        + " --target solana"
         + " --emit llvm-bc"
         + format!(" -o {}", output_dir_path).as_str();
 
