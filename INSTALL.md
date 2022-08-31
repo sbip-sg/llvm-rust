@@ -42,7 +42,10 @@ following the below steps to compile LLVM.
 
 ```sh
 # Install prerequisite libraries
-sudo apt install binutils libffi-dev
+# For Linux
+sudo apt install binutils libffi-dev ninja
+# For MacOS
+brew install binutils libffi ninja
 
 # Prepare installation folder
 export LLVM_INSTALL_DIR=$HOME/llvm/llvm-sbip          # installation dir
