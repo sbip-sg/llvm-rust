@@ -6,7 +6,7 @@ use std::{ffi::OsStr, fs, path::Path, process::Command};
 
 use crate::file::ext;
 use crate::tool::{self, OUTPUT_DIR};
-use rutil::string::StringUtil;
+use rutil::string::StringExt;
 use rutil::{report, system};
 
 /// Required Solang version

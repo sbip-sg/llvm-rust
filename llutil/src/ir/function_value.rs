@@ -5,9 +5,9 @@ use inkwell::{
     module::Module,
     values::{AnyValue, FunctionValue},
 };
-use rutil::string::StringUtil;
+use rutil::string::StringExt;
 
-use super::module::ModuleExt;
+use super::{basic_block::BasicBlockExt, module::ModuleExt};
 
 /// Trait providing additional functions to handle `FunctionValue`
 pub trait FunctionExt {
@@ -102,7 +102,7 @@ impl<'a> FunctionExt for FunctionValue<'a> {
         let blocks = self
             .get_basic_blocks()
             .into_iter()
-            .map(|blk| blk.print_to_string().indent(2))
+            .map(|blk| blk.print_pretty().indent(2))
             .collect::<Vec<String>>()
             .join("\n\n");
 

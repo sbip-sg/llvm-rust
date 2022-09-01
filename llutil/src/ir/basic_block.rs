@@ -1,13 +1,12 @@
 //! Module provide additional utilities to handle LLVM `BasicBlock`.
 
-use inkwell::values::BasicBlock;
-
-use rutil::string::StringUtil;
-
 use super::{
     AnyTerminator, InstructionExt, PhiNode, PredecessorBlock, SuccessorBlock,
     TerminatorInst,
 };
+use inkwell::values::BasicBlock;
+use rutil::string::StringExt;
+use std::fmt::Write;
 
 // use instructions::TerminatorUtil;
 
@@ -16,6 +15,9 @@ use super::{
 pub trait BasicBlockExt<'ctx> {
     /// Get name of the `BasicBlock` or return a default name.
     fn get_name_or_default(&self) -> String;
+
+    /// Print the `BasicBlock` to string in a pretty format.
+    fn print_pretty(&self) -> String;
 
     /// Get all the Phi instructions of the current `BasicBlock`.
     ///
@@ -48,6 +50,24 @@ impl<'ctx> BasicBlockExt<'ctx> for BasicBlock<'ctx> {
             Ok(name) => name.to_string(),
             _ => "<empty-block-name>".to_string(),
         }
+    }
+
+    fn print_pretty(&self) -> String {
+        let mut res = self.get_name_or_default() + ":";
+
+        // Print each instruction of the block
+        for inst in self.get_instructions() {
+            res += "\n";
+            let sinst = format!("{inst}");
+
+            if sinst.has_new_line() {
+                res += &formatp!(2, 2, "", "{}", sinst);
+            } else {
+                res += &formatp!(2, 2, "", "{}", sinst).indent_tail_lines(2);
+            }
+        }
+
+        res
     }
 
     fn get_phi_instructions(&self) -> Vec<PhiNode<'ctx>> {
