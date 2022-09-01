@@ -6,9 +6,6 @@ use crate::file::FileType;
 
 /// Trait provide utilities to handle `Module`.
 pub trait ModuleExt {
-    /// Get module name.
-    fn get_name2(&self) -> Option<String>;
-
     /// Get name of the module or return a default name.
     fn get_name_or_default(&self) -> String;
 
@@ -21,13 +18,6 @@ pub trait ModuleExt {
 
 /// Implement the trait `ModuleExt` for `Module`.
 impl<'ctx> ModuleExt for Module<'ctx> {
-    fn get_name2(&self) -> Option<String> {
-        match self.get_name().to_str() {
-            Ok(name) => Some(name.to_string()),
-            _ => None,
-        }
-    }
-
     fn get_name_or_default(&self) -> String {
         match self.get_name().to_str() {
             Ok(name) => name.to_string(),
@@ -36,22 +26,22 @@ impl<'ctx> ModuleExt for Module<'ctx> {
     }
 
     fn is_originally_from_c_cpp(&self) -> bool {
-        match self.get_name2() {
-            None => false,
-            Some(name) => {
-                let filetype = FileType::new(&name);
+        match self.get_source_file_name().to_str() {
+            Ok(name) => {
+                let filetype = FileType::new(name);
                 filetype.is_c_cpp_code()
             }
+            Err(_) => false,
         }
     }
 
     fn is_originally_from_solidity(&self) -> bool {
-        match self.get_name2() {
-            None => false,
-            Some(name) => {
-                let filetype = FileType::new(&name);
+        match self.get_source_file_name().to_str() {
+            Ok(name) => {
+                let filetype = FileType::new(name);
                 filetype.is_solidity_code()
             }
+            Err(_) => false,
         }
     }
 }
