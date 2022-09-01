@@ -3,3 +3,9 @@ Cargo.lock
 /target
 */target
 **/*.rs.bk
+
+# Binary files
+*.so
+
+# Solidity binary files
+*.abi

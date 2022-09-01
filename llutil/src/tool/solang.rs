@@ -10,7 +10,7 @@ use rutil::string::StringUtil;
 use rutil::{report, system};
 
 /// Required Solang version
-const SOLANG_REQUIRED_VERSION: &str = ">=0.1.12";
+const SOLANG_REQUIRED_VERSION: &str = ">=0.1.13";
 
 /// Check path of the Solang compiler
 fn check_solang_path() {

@@ -25,6 +25,10 @@ linting: format
 test:
 	cargo +stable test --workspace --features linting
 
+# Run unit tests for llutil
+test-llutil:
+	cargo +stable test --package llutil --features linting
+
 # Update packages
 update:
 	cargo +stable update
