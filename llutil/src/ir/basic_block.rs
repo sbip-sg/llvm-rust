@@ -61,9 +61,9 @@ impl<'ctx> BasicBlockExt<'ctx> for BasicBlock<'ctx> {
             let sinst = format!("{inst}");
 
             if sinst.has_new_line() {
-                res += &formatp!(2, 2, "", "{}", sinst);
+                res += &formatp!(2, 8, "", "{}", sinst);
             } else {
-                res += &formatp!(2, 2, "", "{}", sinst).indent_tail_lines(2);
+                res += &formatp!(2, 8, "", "{}", sinst).indent_tail_lines(2);
             }
         }
 
