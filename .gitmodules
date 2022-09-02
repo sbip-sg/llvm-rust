@@ -1,0 +1,3 @@
+[submodule "rutil"]
+	path = rutil
+	url = git@github.com:sbip-sg/rutil
