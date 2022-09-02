@@ -44,6 +44,13 @@ pub trait FunctionExt {
     /// program crash. Remove this parameter once Inkwell are fixed.
     fn is_solidity_library_function(&self, module: &Module) -> bool;
 
+    /// Check if the current function is a Solang-generated function.
+    ///
+    /// NOTE: currently need to pass `module` as a parameter since there is a
+    /// bug in Inkwell that calling to `FunctionValue::get_parent` will make the
+    /// program crash. Remove this parameter once Inkwell are fixed.
+    fn is_solidity_solang_generated_function(&self, module: &Module) -> bool;
+
     /// Check if the current function is an LLVM library function.
     fn is_llvm_intrinsic_function(&self) -> bool;
 
@@ -131,6 +138,12 @@ impl<'a> FunctionExt for FunctionValue<'a> {
             && builtin::is_solidity_library_function(
                 &self.get_name_or_default(),
             )
+    }
+
+    fn is_solidity_solang_generated_function(&self, module: &Module) -> bool {
+        module.is_originally_from_solidity()
+            // A Solang generated function will not contain the string "::"
+            && !self.get_name_or_default().contains("::")
     }
 
     fn is_llvm_intrinsic_function(&self) -> bool {
