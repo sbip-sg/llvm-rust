@@ -19,7 +19,7 @@ regex = "1.5"
 remain = "0.2"
 semver = "1.0"
 # rutil = { git = "https://github.com/sbip-sg/rutil", version = "0.1.1" }
-rutil = { path = "../../rutil" }
+rutil = { path = "../rutil" }
 
 [dev-dependencies]
 serial_test = "0.9.0"
