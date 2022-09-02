@@ -1445,9 +1445,20 @@ extern "C" {
     pub fn LLVMIsConditional(Branch: LLVMValueRef) -> LLVMBool;
     pub fn LLVMGetCondition(Branch: LLVMValueRef) -> LLVMValueRef;
     pub fn LLVMSetCondition(Branch: LLVMValueRef, Cond: LLVMValueRef);
-    pub fn LLVMGetSwitchDefaultDest(
-        SwitchInstr: LLVMValueRef,
+
+    // SwitchInst
+    pub fn LLVMGetSwitchCondition(Switch: LLVMValueRef) -> LLVMValueRef;
+    pub fn LLVMGetSwitchCase(
+        Switch: LLVMValueRef,
+        idx: ::libc::c_uint,
+    ) -> LLVMValueRef;
+    pub fn LLVMGetSwitchSuccessor(
+        Switch: LLVMValueRef,
+        idx: ::libc::c_uint,
     ) -> LLVMBasicBlockRef;
+    pub fn LLVMGetSwitchDefaultDest(Switch: LLVMValueRef) -> LLVMBasicBlockRef;
+    pub fn LLVMGetSwitchNumCases(Switch: LLVMValueRef) -> ::libc::c_uint;
+    pub fn LLVMGetSwitchNumSuccessors(Switch: LLVMValueRef) -> ::libc::c_uint;
 
     // Instructions->Allocas
     // Obtain the type being allocated by an alloca instruction.
