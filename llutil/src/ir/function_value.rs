@@ -3,7 +3,7 @@
 use crate::ir::builtin;
 use inkwell::{
     module::Module,
-    values::{AnyValue, FunctionValue},
+    values::{AnyValue, FunctionValue, GlobalValue},
 };
 use rutil::string::StringExt;
 
@@ -164,6 +164,23 @@ impl<'a> FunctionExt for FunctionValue<'a> {
             && !builtin::is_solidity_library_function(
                 &self.get_name_or_default(),
             )
+    }
+}
+
+/// Trait of utilities for a `Vector` of `GlobalValue`.
+pub trait GlobalVec {
+    /// Print global variables to String.
+    fn print_to_string(&self) -> String;
+}
+
+impl<'a> GlobalVec for Vec<GlobalValue<'a>> {
+    fn print_to_string(&self) -> String {
+        let res = self
+            .iter()
+            .map(|g| formati!(2, "{}", g).indent_tail_lines(2))
+            .collect::<Vec<String>>()
+            .join("\n");
+        ite!(res.is_empty(), "[]".to_string(), "\n".to_string() + &res)
     }
 }
 
