@@ -32,7 +32,9 @@ pub fn check_solang_version() {
             };
             let solang_ver = match Version::parse(solang_ver) {
                 Ok(ver) => ver,
-                Err(msg) => panic!("Solang version not found: {}", msg),
+                Err(msg) => {
+                    panic!("Solang version {} not found: {}", solang_ver, msg)
+                }
             };
             let solang_ver_req =
                 match VersionReq::parse(SOLANG_REQUIRED_VERSION) {
