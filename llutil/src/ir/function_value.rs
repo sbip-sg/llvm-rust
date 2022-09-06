@@ -1,5 +1,7 @@
 //! Module providing additional utilities to handle LLVM `FunctionValue`.
 
+use std::collections::HashSet;
+
 use crate::ir::builtin;
 use inkwell::{
     module::Module,
@@ -184,30 +186,21 @@ impl<'a> GlobalVec for Vec<GlobalValue<'a>> {
     }
 }
 
-/// Trait of utilities for a `Vector` of `FunctionValue`.
-pub trait FunctionVec {
+/// Trait of utilities for a collection (`Vector`, `HashSet`, etc) of
+/// `FunctionValue`.
+pub trait Functions {
     /// Get names of all functions
+    ///
+    /// This function needs to be implemented by each data structure.
     fn get_names(&self) -> Vec<String>;
 
     /// Print function names to String.
-    fn print_names(&self) -> String;
-
-    /// Print function names to a list.
-    fn print_listed_names(&self) -> String;
-}
-
-impl<'a> FunctionVec for Vec<FunctionValue<'a>> {
-    fn get_names(&self) -> Vec<String> {
-        self.iter()
-            .map(|f| f.get_name_or_default())
-            .collect::<Vec<String>>()
-    }
-
     fn print_names(&self) -> String {
         self.get_names().join(", ")
     }
 
-    fn print_listed_names(&self) -> String {
+    /// Print function names to a list.
+    fn print_bulleted_names(&self) -> String {
         let res = self
             .get_names()
             .iter()
@@ -216,6 +209,36 @@ impl<'a> FunctionVec for Vec<FunctionValue<'a>> {
             .join("\n");
 
         ite!(res.is_empty(), "[]".to_string(), "\n".to_string() + &res)
+    }
+}
+
+/// Implement trait `Functions` for `Vec<&FunctionValue>`.
+impl<'a> Functions for Vec<&FunctionValue<'a>> {
+    fn get_names(&self) -> Vec<String> {
+        self.iter()
+            .map(|f| f.get_name_or_default())
+            .collect::<Vec<String>>()
+    }
+}
+
+/// Implement trait `Functions` for `Vec<FunctionValue>`.
+impl<'a> Functions for Vec<FunctionValue<'a>> {
+    fn get_names(&self) -> Vec<String> {
+        self.iter()
+            .map(|f| f.get_name_or_default())
+            .collect::<Vec<String>>()
+    }
+}
+
+/// Implement trait `Functions` for `HashSet<FunctionValue>`.
+impl<'a> Functions for HashSet<FunctionValue<'a>> {
+    fn get_names(&self) -> Vec<String> {
+        let mut names = self
+            .iter()
+            .map(|f| f.get_name_or_default())
+            .collect::<Vec<String>>();
+        names.sort();
+        names
     }
 }
 

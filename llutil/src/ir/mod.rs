@@ -36,7 +36,7 @@ pub use basic_block::Blocks;
 pub use basic_value::BasicValueExt;
 pub use callable_value::CallableExt;
 pub use float::FloatExt;
-pub use function_value::{FunctionExt, FunctionOption, FunctionVec};
+pub use function_value::{FunctionExt, FunctionOption, Functions};
 pub use instruction::InstructionExt;
 pub use int_value::IntExt;
 pub use metadata_value::MetadataExt;
