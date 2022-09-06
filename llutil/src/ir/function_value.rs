@@ -191,6 +191,9 @@ pub trait FunctionVec {
 
     /// Print function names to String.
     fn print_names(&self) -> String;
+
+    /// Print function names to a list.
+    fn print_listed_names(&self) -> String;
 }
 
 impl<'a> FunctionVec for Vec<FunctionValue<'a>> {
@@ -202,6 +205,17 @@ impl<'a> FunctionVec for Vec<FunctionValue<'a>> {
 
     fn print_names(&self) -> String {
         self.get_names().join(", ")
+    }
+
+    fn print_listed_names(&self) -> String {
+        let res = self
+            .get_names()
+            .iter()
+            .map(|f| formatp!(0, 0, "- ", "{}", f).indent_tail_lines(2))
+            .collect::<Vec<String>>()
+            .join("\n");
+
+        ite!(res.is_empty(), "[]".to_string(), "\n".to_string() + &res)
     }
 }
 

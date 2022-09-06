@@ -6,7 +6,6 @@ use super::{
 };
 use inkwell::values::BasicBlock;
 use rutil::string::StringExt;
-use std::fmt::Write;
 
 // use instructions::TerminatorUtil;
 
