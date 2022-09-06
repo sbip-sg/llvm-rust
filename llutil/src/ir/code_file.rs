@@ -51,6 +51,15 @@ impl CodeFile {
         }
     }
 
+    /// Obtain the source file information of the other file.
+    pub fn obtain_source_file_information(&self, other: &Self) -> Self {
+        CodeFile {
+            source_file_name: other.source_file_name.clone(),
+            source_file_type: other.source_file_type.clone(),
+            ..(self.clone())
+        }
+    }
+
     /// Check if the code file is an LLVM bitcode file
     pub fn is_llvm_bitcode(&self) -> bool {
         matches!(self.file_type, FileType::LLVMBC)
@@ -96,7 +105,7 @@ impl CodeFile {
 
     /// Check if a function is a Solidity entry function of the current program.
     pub fn check_solidity_entry_function(&self, func: &FunctionValue) -> bool {
-        self.is_from_solidity() && func.is_solidity_entry_function ()
+        self.is_from_solidity() && func.is_solidity_entry_function()
     }
 }
 
