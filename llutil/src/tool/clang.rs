@@ -123,7 +123,6 @@ pub fn compile(
     }
 
     // Combine to final output file.
-    if include_files.is_empty() {}
     let final_output_path =
         output_dir.join(input_file_stem.to_owned() + ".raw.bc");
     let final_output_file = final_output_path.to_str().unwrap();

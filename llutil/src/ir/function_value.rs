@@ -3,13 +3,10 @@
 use std::collections::HashSet;
 
 use crate::ir::builtin;
-use inkwell::{
-    module::Module,
-    values::{AnyValue, FunctionValue, GlobalValue},
-};
+use inkwell::values::{AnyValue, FunctionValue, GlobalValue};
 use rutil::string::StringExt;
 
-use super::{basic_block::BasicBlockExt, module::ModuleExt};
+use super::basic_block::BasicBlockExt;
 
 /// Trait providing additional functions to handle `FunctionValue`
 pub trait FunctionExt {
@@ -25,33 +22,14 @@ pub trait FunctionExt {
     /// Print the `FunctionValue` to string in a pretty format.
     fn print_pretty(&self) -> String;
 
-    /// Check if the current function is a library function.
-    ///
-    /// NOTE: currently need to pass `module` as a parameter since there is a
-    /// bug in Inkwell that calling to `FunctionValue::get_parent` will make the
-    /// program crash. Remove this parameter once Inkwell are fixed.
-    fn is_library_function(&self, module: &Module) -> bool;
-
     /// Check if the current function is a C library function.
-    ///
-    /// NOTE: currently need to pass `module` as a parameter since there is a
-    /// bug in Inkwell that calling to `FunctionValue::get_parent` will make the
-    /// program crash. Remove this parameter once Inkwell are fixed.
-    fn is_c_library_function(&self, module: &Module) -> bool;
+    fn is_c_library_function(&self) -> bool;
 
     /// Check if the current function is a Solidity library  function.
-    ///
-    /// NOTE: currently need to pass `module` as a parameter since there is a
-    /// bug in Inkwell that calling to `FunctionValue::get_parent` will make the
-    /// program crash. Remove this parameter once Inkwell are fixed.
-    fn is_solidity_library_function(&self, module: &Module) -> bool;
+    fn is_solidity_library_function(&self) -> bool;
 
     /// Check if the current function is a Solang-generated function.
-    ///
-    /// NOTE: currently need to pass `module` as a parameter since there is a
-    /// bug in Inkwell that calling to `FunctionValue::get_parent` will make the
-    /// program crash. Remove this parameter once Inkwell are fixed.
-    fn is_solidity_solang_generated_function(&self, module: &Module) -> bool;
+    fn is_solidity_solang_generated_function(&self) -> bool;
 
     /// Check if the current function is an LLVM library function.
     fn is_llvm_intrinsic_function(&self) -> bool;
@@ -60,18 +38,10 @@ pub trait FunctionExt {
     fn is_assertion_checking_function(&self) -> bool;
 
     /// Check if the current function is a C main function.
-    ///
-    /// NOTE: currently need to pass `module` as a parameter since there is a
-    /// bug in Inkwell that calling to `FunctionValue::get_parent` will make the
-    /// program crash. Remove this parameter once Inkwell are fixed.
-    fn is_c_main_function(&self, module: &Module) -> bool;
+    fn is_c_cpp_main_function(&self) -> bool;
 
     /// Check if the current function is a Solidity entry function.
-    ///
-    /// NOTE: currently need to pass `module` as a parameter since there is a
-    /// bug in Inkwell that calling to `FunctionValue::get_parent` will make the
-    /// program crash. Remove this parameter once Inkwell are fixed.
-    fn is_solidity_entry_function(&self, module: &Module) -> bool;
+    fn is_solidity_entry_function(&self) -> bool;
 }
 
 impl<'a> FunctionExt for FunctionValue<'a> {
@@ -124,28 +94,17 @@ impl<'a> FunctionExt for FunctionValue<'a> {
         res
     }
 
-    fn is_library_function(&self, module: &Module) -> bool {
-        self.is_c_library_function(module)
-            || self.is_solidity_library_function(module)
-            || self.is_assertion_checking_function()
+    fn is_c_library_function(&self) -> bool {
+        builtin::is_c_library_function(&self.get_name_or_default())
     }
 
-    fn is_c_library_function(&self, module: &Module) -> bool {
-        module.is_originally_from_c_cpp()
-            && builtin::is_c_library_function(&self.get_name_or_default())
+    fn is_solidity_library_function(&self) -> bool {
+        builtin::is_solidity_library_function(&self.get_name_or_default())
     }
 
-    fn is_solidity_library_function(&self, module: &Module) -> bool {
-        module.is_originally_from_solidity()
-            && builtin::is_solidity_library_function(
-                &self.get_name_or_default(),
-            )
-    }
-
-    fn is_solidity_solang_generated_function(&self, module: &Module) -> bool {
-        module.is_originally_from_solidity()
-            // A Solang generated function will not contain the string "::"
-            && !self.get_name_or_default().contains("::")
+    fn is_solidity_solang_generated_function(&self) -> bool {
+        // A Solang generated function will not contain the string "::"
+        !self.get_name_or_default().contains("::")
     }
 
     fn is_llvm_intrinsic_function(&self) -> bool {
@@ -156,16 +115,12 @@ impl<'a> FunctionExt for FunctionValue<'a> {
         builtin::is_assertio_checking_function(&self.get_name_or_default())
     }
 
-    fn is_c_main_function(&self, module: &Module) -> bool {
-        module.is_originally_from_c_cpp()
-            && builtin::is_c_main_function(&self.get_name_or_default())
+    fn is_c_cpp_main_function(&self) -> bool {
+        builtin::is_c_main_function(&self.get_name_or_default())
     }
 
-    fn is_solidity_entry_function(&self, module: &Module) -> bool {
-        module.is_originally_from_solidity()
-            && !builtin::is_solidity_library_function(
-                &self.get_name_or_default(),
-            )
+    fn is_solidity_entry_function(&self) -> bool {
+        !builtin::is_solidity_library_function(&self.get_name_or_default())
     }
 }
 

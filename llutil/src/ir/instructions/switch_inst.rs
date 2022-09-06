@@ -49,54 +49,28 @@ impl<'ctx> SwitchInst<'ctx> {
                 Some(BasicValueEnum::new(case))
             }
         }
-
-        // match self.get_operand(index * 2 + 2) {
-        //     None => panic!(
-        //         "{}{}\n{}{}",
-        //         "Invalid switch instruction: ",
-        //         self,
-        //         "Unable to get value of the case: ",
-        //         index
-        //     ),
-        //     Some(case_value) => match case_value {
-        //         Either::Left(v) => v,
-        //         Either::Right(_) => panic!(
-        //             "{}{}\n{}{}",
-        //             "Invalid switch instruction: ",
-        //             self,
-        //             "Unable to get value of the case: ",
-        //             index
-        //         ),
-        //     },
-        // }
     }
 
-    /// Get the successor of a switch-case.
+    /// Get a successor of a switch-case.
     pub fn get_successor(&self, index: u32) -> Option<BasicBlock<'ctx>> {
         unsafe {
             let sucessor = LLVMGetSwitchSuccessor(self.as_value_ref(), index);
             BasicBlock::new(sucessor)
         }
+    }
 
-        // match self.get_operand(index * 2 + 3) {
-        //     None => panic!(
-        //         "{}{}\n{}{}",
-        //         "Invalid switch instruction: ",
-        //         self,
-        //         "Unable to get value of the case: ",
-        //         index
-        //     ),
-        //     Some(case_value) => match case_value {
-        //         Either::Left(_) => panic!(
-        //             "{}{}\n{}{}",
-        //             "Invalid switch instruction: ",
-        //             self,
-        //             "Unable to get value of the case: ",
-        //             index
-        //         ),
-        //         Either::Right(blk) => blk,
-        //     },
-        // }
+    /// Get a pair of case's value and successor
+    pub fn get_case_and_successor(
+        &self,
+        index: u32,
+    ) -> Option<(BasicValueEnum<'ctx>, BasicBlock<'ctx>)> {
+        if let (Some(case), Some(succ)) =
+            (self.get_case(index), self.get_successor(index))
+        {
+            Some((case, succ))
+        } else {
+            None
+        }
     }
 
     /// Get default successor block.
@@ -129,23 +103,13 @@ impl<'ctx> SwitchInst<'ctx> {
 
         let cond = self.get_condition();
         for i in 0..self.get_num_cases() {
-            match (self.get_case(i), self.get_successor(i)) {
-                (Some(case), Some(successor)) => {
-                    let sblk = SuccessorBlock::new(
-                        PathCondition::Value(cond, case),
-                        successor,
-                    );
-                    successors.push(sblk)
-                }
-                (_, _) => {}
+            if let Some((case, successor)) = self.get_case_and_successor(i) {
+                let sblk = SuccessorBlock::new(
+                    PathCondition::Value(cond, case),
+                    successor,
+                );
+                successors.push(sblk)
             }
-            // let case_value = self.get_case(i);
-            // let case_blk = self.get_successor(i);
-            // let sblk = SuccessorBlock::new(
-            //     PathCondition::Value(cond, case_value),
-            //     case_blk,
-            // );
-            // successors.push(sblk)
         }
 
         successors

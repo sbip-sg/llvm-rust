@@ -2,18 +2,10 @@
 
 use inkwell::module::Module;
 
-use crate::file::FileType;
-
 /// Trait provide utilities to handle `Module`.
 pub trait ModuleExt {
     /// Get name of the module or return a default name.
     fn get_name_or_default(&self) -> String;
-
-    /// Check if the current module is originally from a C/C++ file.
-    fn is_originally_from_c_cpp(&self) -> bool;
-
-    /// Check if the current module is originally from a Solidity file.
-    fn is_originally_from_solidity(&self) -> bool;
 }
 
 /// Implement the trait `ModuleExt` for `Module`.
@@ -22,26 +14,6 @@ impl<'ctx> ModuleExt for Module<'ctx> {
         match self.get_name().to_str() {
             Ok(name) => name.to_string(),
             _ => "<unknown-module>".to_string(),
-        }
-    }
-
-    fn is_originally_from_c_cpp(&self) -> bool {
-        match self.get_source_file_name().to_str() {
-            Ok(name) => {
-                let filetype = FileType::new(name);
-                filetype.is_c_cpp_code()
-            }
-            Err(_) => false,
-        }
-    }
-
-    fn is_originally_from_solidity(&self) -> bool {
-        match self.get_source_file_name().to_str() {
-            Ok(name) => {
-                let filetype = FileType::new(name);
-                filetype.is_solidity_code()
-            }
-            Err(_) => false,
         }
     }
 }
