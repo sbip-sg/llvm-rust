@@ -77,7 +77,8 @@ impl CodeFile {
 
     /// Check if a function is a library function of the current code file.
     pub fn check_library_function(&self, func: &FunctionValue) -> bool {
-        self.check_c_cpp_library(func)
+        self.check_assertion_function(func)
+            || self.check_c_cpp_library(func)
             || self.check_solidity_library(func)
             || self.check_solang_generated_library(func)
     }
@@ -99,7 +100,7 @@ impl CodeFile {
     }
 
     /// Check if a function is a C/C++ library of the current program.
-    pub fn check_assertion_library(&self, func: &FunctionValue) -> bool {
+    pub fn check_assertion_function(&self, func: &FunctionValue) -> bool {
         func.is_assertion_checking_function()
     }
 
