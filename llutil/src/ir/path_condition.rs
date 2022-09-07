@@ -4,7 +4,7 @@
 
 use std::fmt::{Display, Formatter, Result};
 
-use inkwell::values::BasicValueEnum;
+use inkwell::values::{BasicValueEnum, AnyValue};
 
 /// Data structure modelling a path condition between two basic blocks.
 #[derive(Clone, Debug)]
@@ -35,9 +35,9 @@ impl<'ctx> Display for PathCondition<'ctx> {
             PathCondition::None => write!(f, "None"),
             PathCondition::Boolean(v, b) => {
                 if *b {
-                    write!(f, "{}", v)
+                    write!(f, "{}", v.print_to_string())
                 } else {
-                    write!(f, "!{}", v)
+                    write!(f, "!{}", v.print_to_string())
                 }
             }
             PathCondition::Value(v, u) => write!(f, "{}={}", v, u),
