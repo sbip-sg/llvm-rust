@@ -98,6 +98,11 @@ impl CodeFile {
         self.is_from_solidity() && func.is_solang_generated_library()
     }
 
+    /// Check if a function is a C/C++ library of the current program.
+    pub fn check_assertion_library(&self, func: &FunctionValue) -> bool {
+        func.is_assertion_checking_function()
+    }
+
     /// Check if a function is a C/C++ main function of the current program.
     pub fn check_c_cpp_main_function(&self, func: &FunctionValue) -> bool {
         self.is_from_c_cpp() && func.is_c_cpp_main_function()

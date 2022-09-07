@@ -300,7 +300,7 @@ pub fn is_llvm_intrinsic_function(func_name: &str) -> bool {
 }
 
 /// Check whether a function is a built-in function of Verazt.
-pub fn is_assertio_checking_function(func_name: &str) -> bool {
+pub fn is_assertion_checking_function(func_name: &str) -> bool {
     func_name.starts_with(assertion_lib::PREFIX_ASSERT)
         || func_name.starts_with(assertion_lib::PREFIX_REFUTE)
         || func_name.starts_with(assertion_lib::PREFIX_ASSUME)

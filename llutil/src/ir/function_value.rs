@@ -112,7 +112,7 @@ impl<'a> FunctionExt for FunctionValue<'a> {
     }
 
     fn is_assertion_checking_function(&self) -> bool {
-        builtin::is_assertio_checking_function(&self.get_name_or_default())
+        builtin::is_assertion_checking_function(&self.get_name_or_default())
     }
 
     fn is_c_cpp_main_function(&self) -> bool {
