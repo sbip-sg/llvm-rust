@@ -39,3 +39,6 @@ pub const LLVM_REQUIRED_VERSION: &str = ">=13.0.0";
 
 /// Default compilation output directory
 pub const OUTPUT_DIR: &str = "logs";
+
+/// Executable file name of `Graphviz`
+pub const DOT: &str = "dot";
