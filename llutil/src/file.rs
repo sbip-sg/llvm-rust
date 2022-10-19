@@ -56,6 +56,9 @@ pub enum FileType {
     /// EMV bytecode files.
     EVMBC,
 
+    /// Floder for solana smart contract
+    Folder,
+
     /// LLVM bitcode files.
     LLVMBC,
 
@@ -70,7 +73,7 @@ pub enum FileType {
 
     /// Unknown file type.
     Unknown,
-
+    
     /// Yul intermediate code (IR) file.
     YulIR,
 }
@@ -84,12 +87,18 @@ impl FileType {
                 ext::C | ext::CPP | ext::CXX | ext::H | ext::HPP | ext::HXX,
             ) => FileType::CCpp,
             Some(ext::SOL) => FileType::Solidity,
+            Some(ext::RS) =>  FileType::Rust,
             Some(ext::BC) => FileType::LLVMBC,
             Some(ext::LL) => FileType::LLVMIR,
             Some(ext::EVM) => FileType::EVMBC,
             Some(ext::YUL) => FileType::YulIR,
-            _ => FileType::Unknown,
-        }
+            _ => {
+                match system::is_folder(file_name){
+                    Some(true) => FileType::Folder,
+                    _ => FileType::Unknown
+                }
+            }
+        }      
     }
 
     /// Check if the current file is a C/C++ file.
@@ -97,8 +106,13 @@ impl FileType {
         matches!(self, FileType::CCpp)
     }
 
-    /// Check if the current file is a C/C++ file.
+    /// Check if the current file is a solidity file.
     pub fn is_solidity_code(&self) -> bool {
         matches!(self, FileType::Solidity)
+    }
+
+    /// Check if the current file is a Rust file
+    pub fn is_rust_code(&self) -> bool {
+        matches!(self, FileType::Rust)
     }
 }
