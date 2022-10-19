@@ -25,7 +25,7 @@ pub fn check_rustc_version() {
     match Command::new(tool::RUSTC).args(&["--version"]).output() {
         Ok(output) => {
             let output_str = String::from_utf8(output.stdout).unwrap();
-            let regex = Regex::new(r"Version: (\d+\.\d+\.\d+)").unwrap();
+            let regex = Regex::new(r"rustc (\d+\.\d+\.\d+)\s\(\w+\s\d+-\d+-\d+\)").unwrap();
             let rustc_ver = match regex.captures(output_str.as_str()) {
                 Some(capture) => capture.get(1).map_or("", |c| c.as_str()),
                 None => "",
