@@ -38,10 +38,10 @@ pub const SOLC: &str = "solc";
 /// Executable file name of the cargo 
 pub const CARGO: &str = "cargo";
 
-/// Executable file name of the cargo for check version
+/// Executable file name of the cargo-build-sbf for check version
 pub const CARGO_BUILD_SBF: &str = "cargo-build-sbf";
 
-/// Executable file name of the cargo for compiler of solana
+/// Executable file name of the cargo-build-bpf for compiler of solana
 pub const CARGO_BUILD_BPF: &str = "cargo-build-bpf";
 
 /// Required LLVM version
@@ -49,3 +49,9 @@ pub const LLVM_REQUIRED_VERSION: &str = ">=13.0.0";
 
 /// Default compilation output directory
 pub const OUTPUT_DIR: &str = "logs";
+
+/// Compilation output directory for solana
+pub const OUTPUT_TARGET_DIR: &str = "target";
+
+/// Manifest for solana
+pub const CARGO_TOML: &str = "Cargo.toml";

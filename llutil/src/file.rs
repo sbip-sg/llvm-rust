@@ -56,7 +56,7 @@ pub enum FileType {
     /// EMV bytecode files.
     EVMBC,
 
-    /// Floder for solana smart contract
+    /// Folder for solana smart contract
     Folder,
 
     /// LLVM bitcode files.
@@ -93,6 +93,7 @@ impl FileType {
             Some(ext::EVM) => FileType::EVMBC,
             Some(ext::YUL) => FileType::YulIR,
             _ => {
+                // check whether the file is a folder
                 match system::is_folder(file_name){
                     Some(true) => FileType::Folder,
                     _ => FileType::Unknown

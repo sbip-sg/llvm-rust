@@ -2,7 +2,6 @@
 
 use regex::Regex;
 use semver::{Version, VersionReq};
-use std::path;
 use std::{ffi::OsStr, fs, path::Path, process::Command};
 
 use crate::file::ext;
@@ -25,6 +24,7 @@ fn check_cargo_path() {
     }
 }
 
+/// check path of cargo-build-sbf
 fn check_cargo_build_sbf_path() {
     match system::path_of_command_from_env(tool::CARGO_BUILD_SBF) {
         Ok(path) => debug!("Cargo-build-sbf path: {}", path),
@@ -112,6 +112,7 @@ pub fn check_cargo_settings() {
     check_cargo_version()
 }
 
+/// Check settings of the cargo-build-sbf
 pub fn check_cargo_build_sbf_settings() {
     check_cargo_build_sbf_path();
     check_cargo_build_sbf_version()
@@ -125,26 +126,20 @@ pub fn compile(input_file: &str, user_options: &[&str]) -> Vec<String> {
 
     // Start to compile the input file
     let input_file_path = Path::new(&input_file);
-    let filename = input_file_path
-        .file_name()
-        .and_then(OsStr::to_str)
-        .unwrap_or("");
-    let parent_dir = input_file_path.parent().unwrap_or_else(|| Path::new(""));
 
-    // Prepare output folder
-    let output_dir = parent_dir.join(OUTPUT_DIR).join(filename);
+    // Prepare output folder, the default output folder will be project/target
+    let output_dir = input_file_path.join(tool::OUTPUT_TARGET_DIR);
     let output_dir_path = output_dir.to_str().unwrap();
     fs::remove_dir_all(output_dir_path).unwrap_or(());
     fs::create_dir_all(output_dir_path).unwrap_or(());
 
-    let toml_path = match input_file_path.to_str(){
-        Some(path) => path.to_owned() + "/Cargo.toml",
-        None => "".to_owned()
-    };
-
+    // Prepare the Cargo.toml path
+    let cargo_toml = input_file_path.join(tool::CARGO_TOML);
+    let cargo_toml_path = cargo_toml.to_str().unwrap();
+    
     let user_options = user_options.join(" ");
     let solana_args = user_options.add_prefix_if_not_empty(" ")
-                            + "--manifest-path " + &toml_path;
+                            + "--manifest-path " + cargo_toml_path;
 
     debug!("Running command: {} {}", tool::CARGO_BUILD_BPF, solana_args);
 
