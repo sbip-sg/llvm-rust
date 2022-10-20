@@ -9,6 +9,7 @@ pub mod llvm_opt;
 pub mod rustc;
 pub mod solang;
 pub mod solc;
+pub mod solana;
 
 /// Executable file name of the Clang compiler
 pub const CLANG: &str = "clang";
@@ -25,7 +26,7 @@ pub const LLVM_LINK: &str = "llvm-link";
 /// Executable file name of the LLVM optimization tool
 pub const LLVM_OPT: &str = "opt";
 
-/// Executable file name of the Solang compiler
+/// Executable file name of the Rustc compiler
 pub const RUSTC: &str = "rustc";
 
 /// Executable file name of the Solang compiler
@@ -33,6 +34,15 @@ pub const SOLANG: &str = "solang";
 
 /// Executable file name of the Solc compiler
 pub const SOLC: &str = "solc";
+
+/// Executable file name of the cargo 
+pub const CARGO: &str = "cargo";
+
+/// Executable file name of the cargo for check version
+pub const CARGO_BUILD_SBF: &str = "cargo-build-sbf";
+
+/// Executable file name of the cargo for compiler of solana
+pub const CARGO_BUILD_BPF: &str = "cargo-build-bpf";
 
 /// Required LLVM version
 pub const LLVM_REQUIRED_VERSION: &str = ">=13.0.0";
